@@ -1,10 +1,11 @@
-
 import { Inter } from 'next/font/google'
 import {useEffect, useState} from "react";
 import {ColumnsType} from "antd/es/table";
 import {Button, Form, Input, message, Modal, Select, Space, Table, Tag} from "antd";
-import { faker } from '@faker-js/faker';
 import {User} from ".prisma/client";
+import {Book} from ".prisma/client";
+import {Checkout} from ".prisma/client";
+import { useNavigate } from 'react-router-dom';
 const inter = Inter({ subsets: ['latin'] })
 
 const layout = {
@@ -18,12 +19,35 @@ const tailLayout = {
 
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [checkouts, setCheckouts] = useState<Checkout[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalTwoOpen, setIsModalTwoOpen] = useState(false);
   const [form] = Form.useForm();
+  const [formTwo] = Form.useForm();
 
   const onFinish = async (values: any) => {
     console.log(values);
     setIsModalOpen(false);
+    fetch('/api/get_user', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }).then(async response => {
+      if (response.status === 200) {
+        const user = await response.json();
+        message.success('Retrieved user ' + user.name);
+      } else message.error(
+          `Failed to get user:\n ${JSON.stringify(await response.json())}`);
+    }).catch(res=>{message.error(res)})
+  };
+
+  const onFinishTwo = async (values: any) => {
+    console.log(values);
+    setIsModalTwoOpen(false);
     fetch('/api/create_user', {
       method: 'POST',
       headers: {
@@ -34,11 +58,9 @@ export default function Home() {
     }).then(async response => {
       if (response.status === 200) {
         const user = await response.json();
-        message.success('created user ' + user.name);
-        setUsers([...users, user]);
-
+        message.success('Created user ' + user.name);
       } else message.error(
-          `Failed to create user:\n ${JSON.stringify(await response.json())}`);
+          `Failed to get user:\n ${JSON.stringify(await response.json())}`);
     }).catch(res=>{message.error(res)})
   };
 
@@ -56,18 +78,30 @@ export default function Home() {
       if (response.status === 200) {
         await response.json();
         message.success('Deleted user ' + user.name);
-        setUsers(users.filter(u=> u.id !== id ));
+        setUsers(users.filter(u=> u.uId !== id ));
 
       } else message.error(
           `Failed to delete user:\n ${user.name}`);
     }).catch(res=>{message.error(res)})
   };
 
-  const columns: ColumnsType<User> = [
+  const colUsers: ColumnsType<User> = [
     {
       title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'uId',
+      key: 'uId',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Password',
+      dataIndex: 'password',
+      key: 'password',
       render: (text) => <a>{text}</a>,
     },
     {
@@ -76,25 +110,71 @@ export default function Home() {
       key: 'name',
       render: (text) => <a>{text}</a>,
     },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
+  ];
 
+  const colBooks: ColumnsType<Book> = [
     {
-      title: 'Action',
-      key: 'action',
-      render: (_, record) => (
-          <Space size="middle">
-            <a onClick={()=>onDelete(record)}>Delete</a>
-          </Space>
-      ),
+      title: 'ID',
+      dataIndex: 'bId',
+      key: 'bId',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'ISBN',
+      dataIndex: 'isbn',
+      key: 'isbn',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Author',
+      dataIndex: 'author',
+      key: 'author',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Copies',
+      dataIndex: 'copies',
+      key: 'copies',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Copies In Use',
+      dataIndex: 'copiesOut',
+      key: 'copiesOut',
+      render: (text) => <a>{text}</a>,
+    },
+  ];
+
+  const colCheckouts: ColumnsType<Checkout> = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'User ID',
+      dataIndex: 'uId',
+      key: 'uId',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'ISBN',
+      dataIndex: 'isbn',
+      key: 'isbn',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Checkout Date',
+      dataIndex: 'date',
+      key: 'date',
+      render: (text) => <a>{text}</a>,
     },
   ];
 
@@ -103,31 +183,30 @@ export default function Home() {
     form.resetFields();
   };
 
-  const onFill = () => {
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.lastName();
-    const email = faker.internet.email({ firstName, lastName });
-    const street = faker.location.streetAddress();
-    const city = faker.location.city();
-    const state  = faker.location.state({ abbreviated: true });
-    const zip = faker.location.zipCode()
-
-    form.setFieldsValue({
-      name: `${firstName} ${lastName}`,
-      email: email,
-      address:
-          `${street}, ${city}, ${state}, US, ${zip}`
-    });
+  const onResetTwo = () => {
+    formTwo.resetFields();
   };
+
   const showModal = () => {
     setIsModalOpen(true);
     form.resetFields();
+  };
+
+  const showModalTwo = () => {
+    setIsModalTwoOpen(true);
+    formTwo.resetFields();
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
     form.resetFields();
   };
+
+  const handleCancelTwo = () => {
+    setIsModalTwoOpen(false);
+    formTwo.resetFields();
+  };
+
   useEffect(()=>{
     fetch('api/all_user', {method: "GET"})
         .then(res => {
@@ -137,13 +216,33 @@ export default function Home() {
         })
   }, []);
 
+  useEffect(()=>{
+    fetch('api/all_books', {method: "GET"})
+        .then(res => {
+          res.json().then(
+              (json=> {setBooks(json)})
+          )
+        })
+  }, []);
+
+  useEffect(()=>{
+    fetch('api/all_checkouts', {method: "GET"})
+        .then(res => {
+          res.json().then(
+              (json=> {setCheckouts(json)})
+          )
+        })
+  }, []);
+
   if (!users) return "Give me a second";
+  if (!books) return "Give me a second";
+  if (!checkouts) return "Give me a second";
 
   return  <>
     <Button type="primary" onClick={showModal}>
-      Add User
+      Login
     </Button>
-    <Modal title="Basic Modal" onCancel={handleCancel}
+    <Modal title="Login to Account" onCancel={handleCancel}
            open={isModalOpen} footer={null}  width={800}>
       <Form
           {...layout}
@@ -152,13 +251,10 @@ export default function Home() {
           onFinish={onFinish}
           style={{ maxWidth: 600 }}
       >
-        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+        <Form.Item name="email" label="Email" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="email" label="email" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="address" label="address" rules={[{ required: true }]}>
+        <Form.Item name="password" label="Password" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
 
@@ -169,17 +265,53 @@ export default function Home() {
           <Button htmlType="button" onClick={onReset}>
             Reset
           </Button>
-          <Button  htmlType="button" onClick={onFill}>
-            Fill form
-          </Button>
           <Button  htmlType="button" onClick={handleCancel}>
             Cancel
           </Button>
         </Form.Item>
       </Form>
     </Modal>
+
+    <Button type="primary" onClick={showModalTwo}>
+      Create Account
+    </Button>
+    <Modal title="Create An Account" onCancel={handleCancelTwo}
+           open={isModalTwoOpen} footer={null}  width={800}>
+      <Form
+          {...layout}
+          form={formTwo}
+          name="control-hooks"
+          onFinish={onFinishTwo}
+          style={{ maxWidth: 600 }}
+      >
+        <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="password" label="Password" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+
+        <Form.Item {...tailLayout} >
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+          <Button htmlType="button" onClick={onResetTwo}>
+            Reset
+          </Button>
+          <Button  htmlType="button" onClick={handleCancelTwo}>
+            Cancel
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
+
+    {/*<p>{JSON.stringify(books)}</p>*/}
+    <Table columns={colBooks} dataSource={books} />;
     {/*<p>{JSON.stringify(users)}</p>*/}
-    <Table columns={columns} dataSource={users} />;
+    <Table columns={colUsers} dataSource={users} />;
   </>;
 
 

@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from "@/model/db";
 
@@ -7,10 +6,13 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    console.log('Create User: ', req.body);
+    console.log('Updated Book Copies: ', req.body);
     try {
-        const user = await prisma.user.create({ data: req.body });
-        res.status(200).json(user);
+        const book = await prisma.book.update({
+            where: {bId: req.body.bId},
+            data: {copiesOut: req.body.copiesOut},
+        });
+        res.status(200).json(book);
     } catch (e) {
         res.status(400).json(e);
     }
