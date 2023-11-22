@@ -6,6 +6,8 @@ import {User} from ".prisma/client";
 import {Book} from ".prisma/client";
 import {Checkout} from ".prisma/client";
 import { useNavigate } from 'react-router-dom';
+import styles from './mystyle.module.css'; 
+
 const inter = Inter({ subsets: ['latin'] })
 
 const layout = {
@@ -87,67 +89,67 @@ export default function Home() {
 
   const colUsers: ColumnsType<User> = [
     {
-      title: 'ID',
+      title: <span className={styles.blue}>ID</span>,
       dataIndex: 'uId',
       key: 'uId',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.textBlue}>{text}</a>,
     },
     {
-      title: 'Email',
+      title: <span className={styles.blue}>Email</span>,
       dataIndex: 'email',
       key: 'email',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.textBlue}>{text}</a>,
     },
     {
-      title: 'Password',
+      title: <span className={styles.blue}>Password</span>,
       dataIndex: 'password',
       key: 'password',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.textBlue}>{text}</a>,
     },
     {
-      title: 'Name',
+      title: <span className={styles.blue}>Name</span>,
       dataIndex: 'name',
       key: 'name',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.textBlue}>{text}</a>,
     },
   ];
 
   const colBooks: ColumnsType<Book> = [
     {
-      title: 'ID',
+      title: <span className={styles.blue}>ID</span>,
       dataIndex: 'bId',
       key: 'bId',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.textBlue}>{text}</a>,
     },
     {
-      title: 'ISBN',
+      title: <span className={styles.blue}>ISBN</span>,
       dataIndex: 'isbn',
       key: 'isbn',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.textBlue}>{text}</a>,
     },
     {
-      title: 'Title',
+      title: <span className={styles.blue}>Title</span>,
       dataIndex: 'title',
       key: 'title',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.textBlue}>{text}</a>,
     },
     {
-      title: 'Author',
+      title: <span className={styles.blue}>Author</span>,
       dataIndex: 'author',
       key: 'author',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.textBlue}>{text}</a>,
     },
     {
-      title: 'Copies',
+      title: <span className={styles.blue}>Copies</span>,
       dataIndex: 'copies',
       key: 'copies',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.textBlue}>{text}</a>,
     },
     {
-      title: 'Copies In Use',
+      title: <span className={styles.blue}>Copies In Use</span>,
       dataIndex: 'copiesOut',
       key: 'copiesOut',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.textBlue}>{text}</a>,
     },
   ];
 
@@ -239,6 +241,7 @@ export default function Home() {
   if (!checkouts) return "Give me a second";
 
   return  <>
+  <div  className={styles.bigblue}>
     <Button type="primary" onClick={showModal}>
       Login
     </Button>
@@ -249,7 +252,9 @@ export default function Home() {
           form={form}
           name="control-hooks"
           onFinish={onFinish}
-          style={{ maxWidth: 600 }}
+          style={{ maxWidth: 600, color: 'blue' }
+          
+        }
       >
         <Form.Item name="email" label="Email" rules={[{ required: true }]}>
           <Input />
@@ -311,7 +316,9 @@ export default function Home() {
     {/*<p>{JSON.stringify(books)}</p>*/}
     <Table columns={colBooks} dataSource={books} />;
     {/*<p>{JSON.stringify(users)}</p>*/}
-    <Table columns={colUsers} dataSource={users} />;
+    <Table columns={colUsers} dataSource={users} />;    
+  </div>
+
   </>;
 
 
