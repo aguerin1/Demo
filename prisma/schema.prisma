@@ -16,6 +16,7 @@ model User {
   email   String  @unique
   password String
   name    String
+  isLibrarian    Boolean @default(false)
   posts   Post[]
 }
 
@@ -24,8 +25,8 @@ model Book {
   isbn    String  @unique
   title   String
   author  String
-  copies  String
-  copiesOut String
+  copies  Int
+  copiesOut Int
 }
 
 model Checkout {

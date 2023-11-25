@@ -3,6 +3,7 @@ export type User = {
     email: string;
     password: string;
     name: string;
+    isLibrarian: boolean;
 }
 
 export type Book = {
@@ -13,6 +14,7 @@ export type Book = {
     author: string;
     copies: number;
     copiesOut: number;
+    copiesAvailable: number;
 }
 
 export type Checkout = {

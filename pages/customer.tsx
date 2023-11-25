@@ -5,6 +5,7 @@ import {Button, Form, Input, message, Modal, Select, Space, Table, Tag} from "an
 import {User} from ".prisma/client";
 import {Book} from ".prisma/client";
 import {Checkout} from ".prisma/client";
+import Logout from './shared/logout';
 const inter = Inter({ subsets: ['latin'] })
 
 const layout = {
@@ -16,7 +17,7 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 12 },
 };
 
-export default function Home() {
+export default function Customer() {
     const [users, setUsers] = useState<User[]>([]);
     const [books, setBooks] = useState<Book[]>([]);
     const [checkouts, setCheckouts] = useState<Checkout[]>([]);
@@ -50,14 +51,13 @@ export default function Home() {
 
     const updateCopies = async (bId: any, copies: number) =>
     {
-        let copiesOut = copies.toString();
         fetch('/api/update_book_copies', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({bId, copiesOut})
+            body: JSON.stringify({bId, copies})
         }).then(async response => {
             if (response.status === 200) {
                 await response.json();
@@ -195,8 +195,8 @@ export default function Home() {
     if (!checkouts) return "Give me a second";
 
     return  <>
-
-        <Table columns={colBooks} dataSource={books} />;
+        <Logout />
+        <Table columns={colBooks} dataSource={books.filter( (books) => books.copies > books.copiesOut)} />;
         <Table columns={colCheckouts} dataSource={checkouts.filter(c=> c.uId === uId )} />;
     </>;
 

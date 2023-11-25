@@ -10,7 +10,7 @@ export default async function handler(
     try {
         const book = await prisma.book.update({
             where: {bId: req.body.bId},
-            data: {copiesOut: req.body.copiesOut},
+            data: {copiesOut: req.body.copies},
         });
         res.status(200).json(book);
     } catch (e) {
