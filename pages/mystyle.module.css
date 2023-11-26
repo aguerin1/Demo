@@ -2,8 +2,6 @@
     color: DodgerBlue;
     padding: 10px;
     text-decoration: underline;
-
-
   }
 
 .blue {
@@ -22,22 +20,36 @@
   color: darkgreen;
   padding: 10px;
   text-decoration: underline;
-
 }
 
-.headhead{
-  color: black;
-  text-decoration: underline;
-  font-size: 45px;
+.headhead {
+    position: absolute;
+    bottom: 15%;
+    left: 30%;
+    font-size: 90px;
+    padding: 50px;
+  }
 
+.box {
+  position: relative;
+  text-align: center;
+}
+
+.pic1{
+  margin-left: auto;
+  margin-right: auto;
+  width: 98%;
+  height: auto;
+  padding: 15px;
 }
 
 .pic{
   margin-left: auto;
   margin-right: auto;
-  width: 95%;
+  width: 98%;
   height: auto;
   padding: 15px;
+  opacity: 50%;
 }
 
 .but{
@@ -71,7 +83,6 @@
   background-color: rgba(234, 236, 237, 0.845);
 }
 
-  
 .inside{
   position: absolute;
   top: 15%;

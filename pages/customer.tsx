@@ -189,7 +189,13 @@ export default function Customer() {
     if (!checkouts) return "Give me a second";
 
     return  <>
-        <h1 className={styles.headhead}>Customer View</h1>
+        
+        <div className={styles.box}>
+            <img className={styles.pic} src={"https://mvc.edu/_resources/images/interior-hero/service-library-1.jpg"} />
+
+            <h1 className={styles.headhead}>Customer View</h1>
+        </div>
+      
 
         <Logout />
         <h1 className={styles.bigblue}>Available Books</h1>

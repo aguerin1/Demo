@@ -62,7 +62,7 @@ const Login = () => {
   return <>
   <div className={styles.pad}>
     
-    <img className={styles.pic} src={"https://frac.org/wp-content/uploads/library-shelves-banner-photo.jpg"} />
+    <img className={styles.pic1} src={"https://frac.org/wp-content/uploads/library-shelves-banner-photo.jpg"} />
     
     <div className={styles.over}>
       <h1 className={styles.inside}>
