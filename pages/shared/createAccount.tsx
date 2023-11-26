@@ -2,6 +2,8 @@ import { Inter } from 'next/font/google'
 import {useState} from "react";
 import {Button, Form, Input, message, Modal,Checkbox, Select, Space, Table, Tag} from "antd";
 import {useCookies} from "react-cookie"
+import styles from 'pages/mystyle.module.css'; 
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -61,43 +63,45 @@ export default function CreateAccount() {
     };
 
     return  <>
-    <Button type="primary" onClick={showModalTwo}>
-      Create Account
-    </Button>
-    <Modal title="Create An Account" onCancel={handleCancelTwo}
-           open={isModalTwoOpen} footer={null}  width={800}>
-      <Form
-          {...layout}
-          form={formTwo}
-          name="control-hooks"
-          onFinish={onFinishTwo}
-          style={{ maxWidth: 600 }}
-      >
-        <Form.Item name="email" label="Email" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="password" label="Password" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="isLibrarian" label="Librarian Account" valuePropName="checked">
-          <Checkbox defaultChecked={false}/>
-        </Form.Item>
+    <div className={styles.pad}>
+      <Button className={styles.but2} onClick={showModalTwo}>
+        Don't have an account? Click here to create an account!
+      </Button>
+      <Modal title="Create An Account" onCancel={handleCancelTwo}
+            open={isModalTwoOpen} footer={null}  width={800}>
+        <Form
+            {...layout}
+            form={formTwo}
+            name="control-hooks"
+            onFinish={onFinishTwo}
+            style={{ maxWidth: 600 }}
+        >
+          <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="password" label="Password" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="isLibrarian" label="Librarian Account" valuePropName="checked">
+            <Checkbox defaultChecked={false}/>
+          </Form.Item>
 
-        <Form.Item {...tailLayout} >
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-          <Button htmlType="button" onClick={onResetTwo}>
-            Reset
-          </Button>
-          <Button  htmlType="button" onClick={handleCancelTwo}>
-            Cancel
-          </Button>
-        </Form.Item>
-      </Form>
-    </Modal>
+          <Form.Item {...tailLayout} >
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+            <Button htmlType="button" onClick={onResetTwo}>
+              Reset
+            </Button>
+            <Button  htmlType="button" onClick={handleCancelTwo}>
+              Cancel
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </div>
     </>
 }
