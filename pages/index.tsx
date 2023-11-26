@@ -155,28 +155,28 @@ export default function Home() {
 
   const colCheckouts: ColumnsType<Checkout> = [
     {
-      title: 'ID',
+      title: <span className={styles.checkoutHeader}>ID</span>,
       dataIndex: 'id',
       key: 'id',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
     },
     {
-      title: 'User ID',
+      title: <span className={styles.checkoutHeader}>User ID</span>,
       dataIndex: 'uId',
       key: 'uId',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
     },
     {
-      title: 'ISBN',
+      title: <span className={styles.checkoutHeader}>ISBN</span>,
       dataIndex: 'isbn',
       key: 'isbn',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
     },
     {
-      title: 'Checkout Date',
+      title: <span className={styles.checkoutHeader}>Checkout Date</span>,
       dataIndex: 'date',
       key: 'date',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
     },
   ];
 
@@ -320,6 +320,4 @@ export default function Home() {
   </div>
 
   </>;
-
-
 }
