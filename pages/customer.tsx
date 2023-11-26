@@ -190,9 +190,11 @@ export default function Customer() {
 
     return  <>
         <Logout />
-        <Table columns={colBooks} dataSource={books.filter( (books) => books.copies > books.copiesOut)} />;
-        <Table columns={colCheckouts} dataSource={checkouts.filter(c=> c.uId === uId )} />;
-    </>;
+        <h1>Available Books</h1>
+        <Table columns={colBooks} dataSource={books.filter( (books) => books.copies > books.copiesOut)} />
+        <h1>Your Books</h1>
+        <Table columns={colCheckouts} dataSource={checkouts.filter(c=> c.uId === uId )} />
+    </>
 
 
 }

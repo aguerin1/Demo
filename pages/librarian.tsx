@@ -145,7 +145,9 @@ export default function Librarian() {
         <AddBook />
         <Logout />
 
-        <Table columns={colBooks} dataSource={books} />;
-        <Table columns={colCheckouts} dataSource={checkouts} />;
+        <h1>All Library Books</h1>
+        <Table columns={colBooks} dataSource={books} />
+        <h1>All books checked out</h1>
+        <Table columns={colCheckouts} dataSource={checkouts} />
     </>;
 }
