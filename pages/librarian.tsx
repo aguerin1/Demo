@@ -5,6 +5,10 @@ import {Button, Form, Input, message, Modal, Select, Space, Table, Tag} from "an
 import {User} from ".prisma/client";
 import {Book} from ".prisma/client";
 import {Checkout} from ".prisma/client";
+import AddBook from "./shared/addBook"
+import Logout from './shared/logout';
+import styles from './mystyle.module.css'; 
+
 const inter = Inter({ subsets: ['latin'] })
 
 const layout = {
@@ -16,31 +20,9 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 12 },
 };
 
-export default function Home() {
-    const [users, setUsers] = useState<User[]>([]);
+export default function Librarian() {
     const [books, setBooks] = useState<Book[]>([]);
     const [checkouts, setCheckouts] = useState<Checkout[]>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [form] = Form.useForm();
-
-    const onFinish = async (values: any) => {
-        console.log(values);
-        setIsModalOpen(false);
-        fetch('/api/create_book', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        }).then(async response => {
-            if (response.status === 200) {
-                const book = await response.json();
-                message.success('Created book: ' + book.title);
-            } else message.error(
-                `Failed to create book:\n ${JSON.stringify(await response.json())}`);
-        }).catch(res=>{message.error(res)})
-    };
 
     const onDelete = async (book: any) => {
         console.log(book);
@@ -113,45 +95,30 @@ export default function Home() {
 
     const colCheckouts: ColumnsType<Checkout> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>ID</span>,
+          dataIndex: 'id',
+          key: 'id',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
         {
-            title: 'User ID',
-            dataIndex: 'uId',
-            key: 'uId',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>User ID</span>,
+          dataIndex: 'uId',
+          key: 'uId',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
         {
-            title: 'Book ID',
-            dataIndex: 'bId',
-            key: 'bId',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>ISBN</span>,
+          dataIndex: 'isbn',
+          key: 'isbn',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
         {
-            title: 'Checkout Date',
-            dataIndex: 'date',
-            key: 'date',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>Checkout Date</span>,
+          dataIndex: 'date',
+          key: 'date',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
-    ];
-
-
-    const onReset = () => {
-        form.resetFields();
-    };
-
-    const showModal = () => {
-        setIsModalOpen(true);
-        form.resetFields();
-    };
-
-    const handleCancel = () => {
-        setIsModalOpen(false);
-        form.resetFields();
-    };
+      ];
 
     useEffect(()=>{
         fetch('api/all_books', {method: "GET"})
@@ -175,49 +142,12 @@ export default function Home() {
     if (!checkouts) return "Give me a second";
 
     return  <>
-        <Button type="primary" onClick={showModal}>
-            Add Book
-        </Button>
-        <Modal title="Add Book" onCancel={handleCancel}
-               open={isModalOpen} footer={null}  width={800}>
-            <Form
-                {...layout}
-                form={form}
-                name="control-hooks"
-                onFinish={onFinish}
-                style={{ maxWidth: 600 }}
-            >
-                <Form.Item name="isbn" label="ISBN" rules={[{ required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name="title" label="Title" rules={[{ required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name="author" label="Author" rules={[{ required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name="copies" label="Copies" rules={[{ required: true }]}>
-                    <Input type="number"/>
-                </Form.Item>
-                <Form.Item name="copiesOut" label="Copies Checked Out" rules={[{ required: true }]}>
-                    <Input type="number"/>
-                </Form.Item>
+        <AddBook />
+        <Logout />
 
-                <Form.Item {...tailLayout} >
-                    <Button type="primary" htmlType="submit">
-                        Submit
-                    </Button>
-                    <Button htmlType="button" onClick={onReset}>
-                        Reset
-                    </Button>
-                    <Button  htmlType="button" onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </Form.Item>
-            </Form>
-        </Modal>
-
-        <Table columns={colBooks} dataSource={books} />;
-        <Table columns={colCheckouts} dataSource={checkouts} />;
+        <h1>All Library Books</h1>
+        <Table columns={colBooks} dataSource={books} />
+        <h1>All books checked out</h1>
+        <Table columns={colCheckouts} dataSource={checkouts} />
     </>;
 }

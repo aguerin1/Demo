@@ -5,6 +5,9 @@ import {Button, Form, Input, message, Modal, Select, Space, Table, Tag} from "an
 import {User} from ".prisma/client";
 import {Book} from ".prisma/client";
 import {Checkout} from ".prisma/client";
+import Logout from './shared/logout';
+import styles from './mystyle.module.css'; 
+
 const inter = Inter({ subsets: ['latin'] })
 
 const layout = {
@@ -16,7 +19,7 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 12 },
 };
 
-export default function Home() {
+export default function Customer() {
     const [users, setUsers] = useState<User[]>([]);
     const [books, setBooks] = useState<Book[]>([]);
     const [checkouts, setCheckouts] = useState<Checkout[]>([]);
@@ -50,14 +53,13 @@ export default function Home() {
 
     const updateCopies = async (bId: any, copies: number) =>
     {
-        let copiesOut = copies.toString();
         fetch('/api/update_book_copies', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({bId, copiesOut})
+            body: JSON.stringify({bId, copies})
         }).then(async response => {
             if (response.status === 200) {
                 await response.json();
@@ -139,39 +141,31 @@ export default function Home() {
 
     const colCheckouts: ColumnsType<Checkout> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>ID</span>,
+          dataIndex: 'id',
+          key: 'id',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
         {
-            title: 'User ID',
-            dataIndex: 'uId',
-            key: 'uId',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>User ID</span>,
+          dataIndex: 'uId',
+          key: 'uId',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
         {
-            title: 'Book ID',
-            dataIndex: 'bId',
-            key: 'bId',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>ISBN</span>,
+          dataIndex: 'isbn',
+          key: 'isbn',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
         {
-            title: 'Checkout Date',
-            dataIndex: 'date',
-            key: 'date',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>Checkout Date</span>,
+          dataIndex: 'date',
+          key: 'date',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (_, record) => (
-                <Space size="middle">
-                    <a onClick={()=>onReturn(record.id, record.bId)}>Return</a>
-                </Space>
-            ),
-        },
-    ];
+      ];
+    
 
     useEffect(()=>{
         fetch('api/all_books', {method: "GET"})
@@ -195,10 +189,12 @@ export default function Home() {
     if (!checkouts) return "Give me a second";
 
     return  <>
-
-        <Table columns={colBooks} dataSource={books} />;
-        <Table columns={colCheckouts} dataSource={checkouts.filter(c=> c.uId === uId )} />;
-    </>;
+        <Logout />
+        <h1>Available Books</h1>
+        <Table columns={colBooks} dataSource={books.filter( (books) => books.copies > books.copiesOut)} />
+        <h1>Your Books</h1>
+        <Table columns={colCheckouts} dataSource={checkouts.filter(c=> c.uId === uId )} />
+    </>
 
 
 }
