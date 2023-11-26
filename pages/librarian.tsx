@@ -7,6 +7,8 @@ import {Book} from ".prisma/client";
 import {Checkout} from ".prisma/client";
 import AddBook from "./shared/addBook"
 import Logout from './shared/logout';
+import styles from './mystyle.module.css'; 
+
 const inter = Inter({ subsets: ['latin'] })
 
 const layout = {
@@ -93,30 +95,30 @@ export default function Librarian() {
 
     const colCheckouts: ColumnsType<Checkout> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>ID</span>,
+          dataIndex: 'id',
+          key: 'id',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
         {
-            title: 'User ID',
-            dataIndex: 'uId',
-            key: 'uId',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>User ID</span>,
+          dataIndex: 'uId',
+          key: 'uId',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
         {
-            title: 'Book ID',
-            dataIndex: 'bId',
-            key: 'bId',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>ISBN</span>,
+          dataIndex: 'isbn',
+          key: 'isbn',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
         {
-            title: 'Checkout Date',
-            dataIndex: 'date',
-            key: 'date',
-            render: (text) => <a>{text}</a>,
+          title: <span className={styles.checkoutHeader}>Checkout Date</span>,
+          dataIndex: 'date',
+          key: 'date',
+          render: (text) => <a className={styles.colCheckoutTextBlue}>{text}</a>,
         },
-    ];
+      ];
 
     useEffect(()=>{
         fetch('api/all_books', {method: "GET"})
