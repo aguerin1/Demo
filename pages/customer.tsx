@@ -189,10 +189,18 @@ export default function Customer() {
     if (!checkouts) return "Give me a second";
 
     return  <>
+        
+        <div className={styles.box}>
+            <img className={styles.pic} src={"https://mvc.edu/_resources/images/interior-hero/service-library-1.jpg"} />
+
+            <h1 className={styles.headhead}>Customer View</h1>
+        </div>
+      
+
         <Logout />
-        <h1>Available Books</h1>
+        <h1 className={styles.bigblue}>Available Books</h1>
         <Table columns={colBooks} dataSource={books.filter( (books) => books.copies > books.copiesOut)} />
-        <h1>Your Books</h1>
+        <h1 className={styles.checkoutHeader}>Your Books</h1>
         <Table columns={colCheckouts} dataSource={checkouts.filter(c=> c.uId === uId )} />
     </>
 

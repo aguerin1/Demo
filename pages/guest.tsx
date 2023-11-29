@@ -22,7 +22,6 @@ export default function Guest() {
     <Login />
     <CreateAccount />
     <h1>Available Books</h1>
-    <h3>Please login to checkout</h3>
     <AvailableBooks />
   </div>
 

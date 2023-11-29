@@ -142,12 +142,18 @@ export default function Librarian() {
     if (!checkouts) return "Give me a second";
 
     return  <>
+         <div className={styles.box}>
+            <img className={styles.pic} src={"https://mvc.edu/_resources/images/interior-hero/service-library-1.jpg"} />
+
+            <h1 className={styles.headhead}>Librarian View</h1>
+        </div>
+
         <AddBook />
         <Logout />
 
-        <h1>All Library Books</h1>
+        <h1 className={styles.bigblue}>All Library Books</h1>
         <Table columns={colBooks} dataSource={books} />
-        <h1>All books checked out</h1>
+        <h1 className={styles.checkoutHeader}>All books checked out</h1>
         <Table columns={colCheckouts} dataSource={checkouts} />
     </>;
 }
